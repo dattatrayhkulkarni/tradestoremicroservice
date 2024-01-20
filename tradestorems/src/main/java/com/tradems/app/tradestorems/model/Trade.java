@@ -41,6 +41,21 @@ public class Trade {
     @JsonProperty("expired")
     private char expired;
 
+    public Trade() {
+    }
+
+    public Trade(String tradeId, int version, String counterPartyId, String bookId,
+                 LocalDate maturityDate,
+                 LocalDate createdDate, char expired) {
+        this.tradeId = tradeId;
+        this.version = version;
+        this.counterPartyId = counterPartyId;
+        this.bookId = bookId;
+        this.maturityDate = maturityDate;
+        this.createdDate = createdDate;
+        this.expired = expired;
+    }
+
 
     public String getTradeId() {
         return tradeId;

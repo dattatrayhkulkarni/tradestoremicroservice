@@ -30,6 +30,20 @@ public class TradeService {
         }
 
 
+        List<Trade> tradeList = getTradesByTradeId(trade.getTradeId());
+        // check if Trade with lower version is received
+
+        for (Trade tradeEntry: tradeList) {
+
+            if(trade.getVersion() < tradeEntry.getVersion()) {
+                System.out.println("trade with lower version received, throwing an exception");
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Trade with Lower version received");
+            }
+
+        }
+
+
         Trade tradeEntry = getTradesByIdVersion(trade.getTradeId(),trade.getVersion());
 
 
@@ -66,11 +80,7 @@ public class TradeService {
 
     public Trade getTradesByIdVersion(String tradeId, int version) {
 
-        //findByNameAndLocation(String name, String location)
-
         Trade trade = tradeRepository.findByTradeIdAndVersion(tradeId, version);
-
-       // Trade trade = tradeRepository.findById(tradeId).get();
 
         if (trade == null) {
             System.out.println("*** Trade is not found ");

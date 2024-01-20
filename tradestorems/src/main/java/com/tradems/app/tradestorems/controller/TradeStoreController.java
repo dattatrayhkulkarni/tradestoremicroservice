@@ -67,26 +67,6 @@ public class TradeStoreController {
     }
 
 
-
-
-    /*
-    @GetMapping("/{id}")
-    public Trade getUserById(@PathVariable("/trades/{tradeId}") String id) {
-
-        Optional<Trade> trade = tradeService.getTradesById(id);
-
-        if (trade.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with id %d not found", id));
-        }
-
-        return trade;
-    }
-    */
-
-
-    // java.util.NoSuchElementException
-
-
     @RequestMapping(value="/trades/{tradeId}", method=RequestMethod.PUT)
     public Trade updateTrade(@PathVariable(value = "tradeId") String id, @RequestBody Trade tradeDetails) {
         return tradeService.updateTrade(id, tradeDetails);
