@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "trade")
+@IdClass(TradeId.class)
 public class Trade {
 
     @Id
@@ -14,6 +15,8 @@ public class Trade {
     @JsonProperty("trade_id")
     private String tradeId;
 
+
+    @Id
     @Column(name="version")
     @JsonProperty("version")
     private int version;

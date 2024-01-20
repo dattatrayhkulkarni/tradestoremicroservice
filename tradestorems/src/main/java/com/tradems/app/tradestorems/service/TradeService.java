@@ -1,6 +1,7 @@
 package com.tradems.app.tradestorems.service;
 
 import com.tradems.app.tradestorems.model.Trade;
+import com.tradems.app.tradestorems.model.TradeId;
 import com.tradems.app.tradestorems.repository.TradeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,6 @@ public class TradeService {
         Trade tradeEntry = getTradesByIdVersion(trade.getTradeId(),trade.getVersion());
 
 
-
         if(tradeEntry == null) {
             System.out.println("trade entry not found ");
         } else {
@@ -43,7 +43,9 @@ public class TradeService {
         return tradeRepository.save(trade);
     }
 
+
     public List<Trade> getTrades() {
+
         return tradeRepository.findAll();
     }
 
@@ -51,9 +53,9 @@ public class TradeService {
         tradeRepository.deleteById(tradeId);
     }
 
-     public Trade getTradesById(String tradeId) {
+     public Trade getTradesById(String tradeId, int version) {
 
-        Trade trade = tradeRepository.findById(tradeId).get();
+        Trade trade = tradeRepository.findByTradeIdAndVersion(tradeId,version);
 
         if (trade == null) {
             System.out.println("*** Trade is not found ");
@@ -74,6 +76,17 @@ public class TradeService {
             System.out.println("*** Trade is not found ");
         }
         return trade;
+
+    }
+
+    public List<Trade> getTradesByTradeId(String tradeId) {
+
+        List<Trade> trades = tradeRepository.findByTradeId(tradeId);
+
+        if (trades == null) {
+            System.out.println("*** Trade is not found ");
+        }
+        return trades;
 
     }
 

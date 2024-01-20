@@ -51,11 +51,11 @@ public class TradeStoreController {
 
 
     @RequestMapping(value="/trades/{tradeId}", method=RequestMethod.GET)
-    public Trade readTradesbyId(@PathVariable(value = "tradeId") String id) {
+    public List<Trade> readTradesbyId(@PathVariable(value = "tradeId") String id) {
 
         try {
-            Trade trade = tradeService.getTradesById(id);
-            return trade;
+            List<Trade> trades = tradeService.getTradesByTradeId(id);
+            return trades;
         } catch (NoSuchElementException exception) {
 
             throw new ResponseStatusException(

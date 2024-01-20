@@ -6,7 +6,6 @@ CREATE TABLE `trade` (
   `expired` varchar(1) DEFAULT NULL,
   `maturity_date` DATE DEFAULT NULL,
   `created_date` DATE DEFAULT NULL,
-  PRIMARY KEY(trade_id)
+  PRIMARY KEY(trade_id, version)
 );
 
-//ALTER TABLE employee MODIFY COLUMN emp_id INT auto_increment
