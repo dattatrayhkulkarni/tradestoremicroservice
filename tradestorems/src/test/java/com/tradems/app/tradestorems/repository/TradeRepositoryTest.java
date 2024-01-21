@@ -82,6 +82,25 @@ class TradeRepositoryTest {
 
     }
 
+    @Test
+    void testUpdateTrade(){
+
+        Trade trade = new Trade("T2", 10, "CP3", "B1",
+                LocalDate.now(), LocalDate.now(), 'N');
+
+        tradetRepository.save(trade);
+
+        String newBookId = "Updated B1";
+        trade.setBookId(newBookId);
+
+        tradetRepository.save(trade);
+
+        Trade updatedTrade = tradetRepository.findByTradeIdAndVersion("T2", 10);
+
+        assertEquals(newBookId, updatedTrade.getBookId());
+
+    }
+
 
 
 }

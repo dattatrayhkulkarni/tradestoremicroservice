@@ -83,6 +83,27 @@ class TradeStoreControllerTest {
     }
 
 
+    /*
+    @Test
+    public void testfindByTradeidAndVersion() throws Exception {
+
+        Trade trade1 = new Trade("T33", 9, "CP3", "B1",
+                LocalDate.now(), LocalDate.now(), 'N');
+
+
+        Mockito.when(tradeService.getTradesByIdVersion("T33", 9)).thenReturn(trade1);
+
+        ResultActions response;
+
+        response = mockMvc.perform(MockMvcRequestBuilders.get("/api/trades/T33"));
+        response.andExpect(MockMvcResultMatchers.status().isOk());
+        response.andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(1)));
+
+    }
+
+     */
+
+
 
     @Test
     public void testCreateTrade() throws Exception {
@@ -106,6 +127,40 @@ class TradeStoreControllerTest {
         response.andExpect(MockMvcResultMatchers.status().isOk());
 
     }
+
+
+    /*
+    @Test
+    public void testExpiredTrades() throws Exception {
+
+        Trade trade1 = new Trade("T22", 8, "CP3", "B1",
+                LocalDate.now().minusDays(1), LocalDate.now(), 'N');
+
+        Trade trade2 = new Trade("T23", 8, "CP3", "B1",
+                LocalDate.now().minusDays(1), LocalDate.now(), 'N');
+
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+
+        Mockito.when(tradeService.createTrade(trade1)).thenReturn(trade1);
+
+        String json = mapper.writeValueAsString(trade1);
+
+        ResultActions response;
+
+        response = mockMvc.perform(MockMvcRequestBuilders.post("/api/trades").contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+
+
+     */
+
+
 
 
 }

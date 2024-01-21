@@ -66,11 +66,47 @@ public class TradeStoreController {
 
     }
 
+    @RequestMapping(value="/trades/{tradeId}/{version}", method=RequestMethod.GET)
+    public Trade readTradesbyIdAndVersion(@PathVariable(value = "tradeId") String id,
+                                                @PathVariable(value = "version") int version) {
 
-    @RequestMapping(value="/trades/{tradeId}", method=RequestMethod.PUT)
-    public Trade updateTrade(@PathVariable(value = "tradeId") String id, @RequestBody Trade tradeDetails) {
-        return tradeService.updateTrade(id, tradeDetails);
+        try {
+            Trade trade = tradeService.getTradesByIdVersion(id,version);
+
+            if(trade == null) {
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Trade Not Found");
+            }
+
+            return trade;
+        } catch (NoSuchElementException exception) {
+
+            System.out.println("Trade Not Found inside readTradesbyIdAndVersion");
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Trade Not Found", exception);
+
+        }
+
+
     }
+
+
+    @RequestMapping(value="/trades/{tradeId}/{version}", method=RequestMethod.PUT)
+    public Trade updateTrade(@PathVariable(value = "tradeId") String id,
+                             @PathVariable(value = "version") int version,
+                             @RequestBody Trade tradeDetails) {
+
+        return tradeService.updateTrade(id, version, tradeDetails);
+    }
+
+    @RequestMapping(value="/trades/expired", method=RequestMethod.GET)
+    public List<Trade> getExpiredTrades() {
+
+        System.out.println("Inside getExpiredTrades");
+
+        return tradeService.getTrades();
+    }
+
 
     @RequestMapping(value="/trade/{tradeId}", method=RequestMethod.DELETE)
     public void deleteTrades(@PathVariable(value = "tradeId") String id) {

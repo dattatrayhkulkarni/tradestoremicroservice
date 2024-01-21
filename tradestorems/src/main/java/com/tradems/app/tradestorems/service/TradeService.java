@@ -83,7 +83,7 @@ public class TradeService {
         Trade trade = tradeRepository.findByTradeIdAndVersion(tradeId, version);
 
         if (trade == null) {
-            System.out.println("*** Trade is not found ");
+            System.out.println("*** Trade with given TradeId and Version not Found ");
         }
         return trade;
 
@@ -95,6 +95,8 @@ public class TradeService {
 
         if (trades == null) {
             System.out.println("*** Trade is not found ");
+
+
         }
         return trades;
 
@@ -103,12 +105,17 @@ public class TradeService {
 
 
     // UPDATE
-    public Trade updateTrade(String tradeId, Trade tradeDetails) {
-        Trade trade = tradeRepository.findById(tradeId).get();
+    public Trade updateTrade(String tradeId, int version, Trade tradeDetails) {
+
+        Trade trade = tradeRepository.findByTradeIdAndVersion(tradeId, version);
+
+        if(trade == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Trade with given Trade Id and version not found");
+        }
 
         trade.setBookId(tradeDetails.getBookId());
         trade.setExpired(tradeDetails.getExpired());
-        trade.setVersion(tradeDetails.getVersion());
         trade.setCreatedDate(tradeDetails.getCreatedDate());
         trade.setMaturityDate(tradeDetails.getMaturityDate());
         trade.setCounterPartyId(tradeDetails.getCounterPartyId());

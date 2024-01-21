@@ -30,6 +30,8 @@ class TradeServiceTest {
 
     }
 
+
+
     @Test
     public void getTrades() {
 
