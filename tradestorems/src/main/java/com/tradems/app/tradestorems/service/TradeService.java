@@ -63,8 +63,8 @@ public class TradeService {
         return tradeRepository.findAll();
     }
 
-    public void deleteTrade(String tradeId) {
-        tradeRepository.deleteById(tradeId);
+    public void deleteTrade(String tradeId, int version) {
+        tradeRepository.deleteByTradeIdAndVersion(tradeId, version);
     }
 
      public Trade getTradesById(String tradeId, int version) {

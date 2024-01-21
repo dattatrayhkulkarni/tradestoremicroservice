@@ -24,8 +24,7 @@ public class TradeStoreController {
 
     @RequestMapping(value="/trades", method= RequestMethod.POST)
     public Trade createTrade(@RequestBody Trade trade) {
-        System.out.println("------------------------");
-        System.out.println(" **** Inside createTrade *****");
+
         System.out.println(trade);
 
 
@@ -38,7 +37,7 @@ public class TradeStoreController {
                     HttpStatus.BAD_REQUEST, "Invalid Trade request");
 
         }
-        System.out.println("------------------------");
+
         return tradeService.createTrade(trade);
     }
 
@@ -116,9 +115,10 @@ public class TradeStoreController {
     }
 
 
-    @RequestMapping(value="/trade/{tradeId}", method=RequestMethod.DELETE)
-    public void deleteTrades(@PathVariable(value = "tradeId") String id) {
-        tradeService.deleteTrade(id);
+    @RequestMapping(value="/trades/{tradeId}/{version}", method=RequestMethod.DELETE)
+    public void deleteTrades(@PathVariable(value = "tradeId") String id,
+                             @PathVariable(value = "version") int version) {
+        tradeService.deleteTrade(id, version);
     }
 
 

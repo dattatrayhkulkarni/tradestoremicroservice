@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 
+import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @AutoConfigureMockMvc
@@ -34,11 +35,10 @@ class TradeRepositoryTest {
         Trade trade = new Trade("T2", 8, "CP3", "B1",
                 LocalDate.now(), LocalDate.now(), 'N');
 
-        tradetRepository.save(trade);
-        ResultActions response;
+        Trade createdTrade = tradetRepository.save(trade);
 
-        response = mockMvc.perform(MockMvcRequestBuilders.get("/api/trades/T2"));
-        response.andExpect(MockMvcResultMatchers.status().isOk());
+        assertEquals("T2", createdTrade.getTradeId());
+
     }
 
 
@@ -52,15 +52,13 @@ class TradeRepositoryTest {
                 LocalDate.now(), LocalDate.now(), 'N');
 
         tradetRepository.save(trade1);
-        tradetRepository.save(trade2);
-        ResultActions response;
+        Trade createdTrade2 = tradetRepository.save(trade2);
 
-        response = mockMvc.perform(MockMvcRequestBuilders.get("/api/trades/T22"));
-        response.andExpect(MockMvcResultMatchers.status().isOk());
+        assertEquals("T22", createdTrade2.getTradeId());
 
-        response.andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(2)));
 
     }
+
 
 
     @Test

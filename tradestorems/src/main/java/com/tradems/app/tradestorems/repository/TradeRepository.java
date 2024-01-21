@@ -17,6 +17,10 @@ public interface TradeRepository extends JpaRepository<Trade, String> {
 
     List<Trade> findByTradeId(String tradeId);
 
+    @Modifying
+    @Transactional
+    void deleteByTradeIdAndVersion(String tradeId, int version);
+
     @Query(
             value = "SELECT * FROM trade t WHERE t.maturity_date < DATE(NOW())  AND expired= 'N'",
             nativeQuery = true)
