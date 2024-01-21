@@ -2,8 +2,11 @@ package com.tradems.app.tradestorems.repository;
 
 import com.tradems.app.tradestorems.model.Trade;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,8 +18,15 @@ public interface TradeRepository extends JpaRepository<Trade, String> {
     List<Trade> findByTradeId(String tradeId);
 
     @Query(
-            value = "SELECT * FROM trade t WHERE t.maturity_date < DATE(NOW()))",
+            value = "SELECT * FROM trade t WHERE t.maturity_date < DATE(NOW())",
             nativeQuery = true)
     List<Trade> getTradesWithPreviousMaturityDate();
+
+    @Modifying
+    @Transactional
+    @Query(
+            value = "UPDATE trade  SET expired = 'Y' WHERE maturity_date < DATE(NOW())",
+            nativeQuery = true)
+    void updateTradesWithPreviousMaturityDate();
 
 }

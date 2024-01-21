@@ -90,6 +90,22 @@ public class TradeStoreController {
 
     }
 
+    @RequestMapping(value="/trades/expired", method=RequestMethod.GET)
+    public List<Trade> getExpiredTrades(@RequestParam(name = "expired") String expiredFlag) {
+
+        System.out.println("Inside getExpiredTrades");
+
+        return tradeService.getExpiredTrades();
+    }
+
+    @RequestMapping(value="/trades/expired", method=RequestMethod.PUT)
+    public List<Trade> updateExpiredTrades(@RequestParam(name = "expired") String expiredFlag) {
+
+        System.out.println("Inside updateExpiredTrades");
+
+        return tradeService.updateExpiredTrades();
+    }
+
 
     @RequestMapping(value="/trades/{tradeId}/{version}", method=RequestMethod.PUT)
     public Trade updateTrade(@PathVariable(value = "tradeId") String id,
@@ -97,14 +113,6 @@ public class TradeStoreController {
                              @RequestBody Trade tradeDetails) {
 
         return tradeService.updateTrade(id, version, tradeDetails);
-    }
-
-    @RequestMapping(value="/trades/expired", method=RequestMethod.GET)
-    public List<Trade> getExpiredTrades() {
-
-        System.out.println("Inside getExpiredTrades");
-
-        return tradeService.getTrades();
     }
 
 

@@ -103,8 +103,33 @@ public class TradeService {
     }
 
 
+    public List<Trade> getExpiredTrades() {
 
-    // UPDATE
+        List<Trade> trades = tradeRepository.getTradesWithPreviousMaturityDate();
+
+        if (trades == null) {
+            System.out.println("*** No Trades with previous maturity date ");
+
+
+        }
+        return trades;
+    }
+
+
+    public List<Trade> updateExpiredTrades() {
+
+        List<Trade> trades = tradeRepository.getTradesWithPreviousMaturityDate();
+
+        if (trades == null) {
+            System.out.println("*** No Trades with previous maturity date ");
+        }
+
+        tradeRepository.updateTradesWithPreviousMaturityDate();
+        return trades;
+    }
+
+
+        // UPDATE
     public Trade updateTrade(String tradeId, int version, Trade tradeDetails) {
 
         Trade trade = tradeRepository.findByTradeIdAndVersion(tradeId, version);

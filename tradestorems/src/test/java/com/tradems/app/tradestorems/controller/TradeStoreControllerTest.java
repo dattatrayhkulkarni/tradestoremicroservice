@@ -83,25 +83,37 @@ class TradeStoreControllerTest {
     }
 
 
-    /*
     @Test
-    public void testfindByTradeidAndVersion() throws Exception {
+    public void testExpiredTrades() throws Exception {
 
-        Trade trade1 = new Trade("T33", 9, "CP3", "B1",
+        Trade trade1 = new Trade("T22", 8, "CP3", "B1",
                 LocalDate.now(), LocalDate.now(), 'N');
 
+        Trade trade2 = new Trade("T22", 9, "CP3", "B1",
+                LocalDate.now(), LocalDate.now(), 'N');
 
-        Mockito.when(tradeService.getTradesByIdVersion("T33", 9)).thenReturn(trade1);
+        Trade trade3 = new Trade("T22", 10, "CP3", "B1",
+                LocalDate.now().minusDays(1), LocalDate.now(), 'N');
+
+        Trade trade4 = new Trade("T22", 10, "CP3", "B1",
+                LocalDate.now(), LocalDate.now().minusDays(1), 'N');
+
+
+        List<Trade> trades = Arrays.asList(trade1,trade2);
+
+        List<Trade> expiredTrades = Arrays.asList(trade3,trade4);
+
+
+        Mockito.when(tradeService.getExpiredTrades()).thenReturn(expiredTrades);
 
         ResultActions response;
 
-        response = mockMvc.perform(MockMvcRequestBuilders.get("/api/trades/T33"));
+        response = mockMvc.perform(MockMvcRequestBuilders.get("/api/trades/expired?expired=true"));
         response.andExpect(MockMvcResultMatchers.status().isOk());
-        response.andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(1)));
+        response.andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(2)));
 
     }
 
-     */
 
 
 
@@ -129,36 +141,6 @@ class TradeStoreControllerTest {
     }
 
 
-    /*
-    @Test
-    public void testExpiredTrades() throws Exception {
-
-        Trade trade1 = new Trade("T22", 8, "CP3", "B1",
-                LocalDate.now().minusDays(1), LocalDate.now(), 'N');
-
-        Trade trade2 = new Trade("T23", 8, "CP3", "B1",
-                LocalDate.now().minusDays(1), LocalDate.now(), 'N');
-
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-
-        Mockito.when(tradeService.createTrade(trade1)).thenReturn(trade1);
-
-        String json = mapper.writeValueAsString(trade1);
-
-        ResultActions response;
-
-        response = mockMvc.perform(MockMvcRequestBuilders.post("/api/trades").contentType(MediaType.APPLICATION_JSON)
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON));
-
-        response.andExpect(MockMvcResultMatchers.status().isOk());
-
-    }
-
-
-     */
 
 
 
