@@ -18,7 +18,7 @@ public interface TradeRepository extends JpaRepository<Trade, String> {
     List<Trade> findByTradeId(String tradeId);
 
     @Query(
-            value = "SELECT * FROM trade t WHERE t.maturity_date < DATE(NOW())",
+            value = "SELECT * FROM trade t WHERE t.maturity_date < DATE(NOW())  AND expired= 'N'",
             nativeQuery = true)
     List<Trade> getTradesWithPreviousMaturityDate();
 
