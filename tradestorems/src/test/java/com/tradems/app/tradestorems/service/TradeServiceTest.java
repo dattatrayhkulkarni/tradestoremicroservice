@@ -39,11 +39,6 @@ class TradeServiceTest {
 
         assertThat(createdTrade).isNotNull();
 
-        // getTrades
-        // getTradesByIdVersion
-        // getTradesByTradeId
-        // getExpiredTrades
-        //
 
     }
 
