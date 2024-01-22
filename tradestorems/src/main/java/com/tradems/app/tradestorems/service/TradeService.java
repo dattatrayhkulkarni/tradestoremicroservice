@@ -1,8 +1,11 @@
 package com.tradems.app.tradestorems.service;
 
+import com.tradems.app.tradestorems.controller.TradeStoreController;
 import com.tradems.app.tradestorems.model.Trade;
 import com.tradems.app.tradestorems.model.TradeId;
 import com.tradems.app.tradestorems.repository.TradeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,14 +20,19 @@ public class TradeService {
     @Autowired
     TradeRepository tradeRepository;
 
+    static Logger logger
+            = LoggerFactory.getLogger(TradeStoreController.class);
+
     public Trade createTrade(Trade trade) {
 
-        System.out.println("Inside Create Trade ");
-        System.out.println("Value of trade = ");
-        System.out.println(trade);
+        logger.debug("Inside createTrade");
+
+        logger.debug("Value of trade =  " + trade);
+
 
         if(trade.getMaturityDate().isBefore(LocalDate.now())) {
-            System.out.println("trade with earlier Maturity date received, ignoring ");
+
+            logger.warn("trade with earlier Maturity date received, ignoring ");
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Invalid Trade request");
         }
@@ -36,7 +44,7 @@ public class TradeService {
         for (Trade tradeEntry: tradeList) {
 
             if(trade.getVersion() < tradeEntry.getVersion()) {
-                System.out.println("trade with lower version received, throwing an exception");
+                logger.warn("trade with lower version received, throwing an exception");
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "Trade with Lower version received");
             }
@@ -48,10 +56,10 @@ public class TradeService {
 
 
         if(tradeEntry == null) {
-            System.out.println("trade entry not found ");
+            logger.info("trade entry not found ");
         } else {
-            System.out.println("trade entry found for tradeId " +
-                    trade.getTradeId() + " and version = " + trade.getVersion());
+            logger.info("trade entry found for tradeId " +
+            trade.getTradeId() + " and version = " + trade.getVersion());
         }
 
         return tradeRepository.save(trade);
@@ -72,7 +80,7 @@ public class TradeService {
         Trade trade = tradeRepository.findByTradeIdAndVersion(tradeId,version);
 
         if (trade == null) {
-            System.out.println("*** Trade is not found ");
+            logger.warn("Trade is not found ");
         }
         return trade;
 
@@ -83,7 +91,7 @@ public class TradeService {
         Trade trade = tradeRepository.findByTradeIdAndVersion(tradeId, version);
 
         if (trade == null) {
-            System.out.println("*** Trade with given TradeId and Version not Found ");
+            logger.warn("Trade with given TradeId and Version not Found ");
         }
         return trade;
 
@@ -94,9 +102,7 @@ public class TradeService {
         List<Trade> trades = tradeRepository.findByTradeId(tradeId);
 
         if (trades == null) {
-            System.out.println("*** Trade is not found ");
-
-
+            logger.warn("Trade is not found ");
         }
         return trades;
 
@@ -108,8 +114,7 @@ public class TradeService {
         List<Trade> trades = tradeRepository.getTradesWithPreviousMaturityDate();
 
         if (trades == null) {
-            System.out.println("*** No Trades with previous maturity date ");
-
+            logger.warn("No Trades with previous maturity date ");
 
         }
         return trades;
@@ -121,7 +126,7 @@ public class TradeService {
         List<Trade> trades = tradeRepository.getTradesWithPreviousMaturityDate();
 
         if (trades == null) {
-            System.out.println("*** No Trades with previous maturity date ");
+            logger.info("No Trades with previous maturity date");
         }
 
         tradeRepository.updateTradesWithPreviousMaturityDate();
@@ -135,6 +140,8 @@ public class TradeService {
         Trade trade = tradeRepository.findByTradeIdAndVersion(tradeId, version);
 
         if(trade == null) {
+
+            logger.warn("Trade with given Trade Id and version not found");
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Trade with given Trade Id and version not found");
         }

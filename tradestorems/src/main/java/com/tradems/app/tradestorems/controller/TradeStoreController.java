@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -21,18 +25,18 @@ public class TradeStoreController {
     @Autowired
     private TradeService tradeService;
 
+    static  Logger logger
+            = LoggerFactory.getLogger(TradeStoreController.class);
+
 
     @RequestMapping(value="/trades", method= RequestMethod.POST)
     public Trade createTrade(@RequestBody Trade trade) {
 
-        System.out.println(trade);
-
-
         if(trade.getTradeId() == null || trade.getVersion() == 0 ||
             trade.getMaturityDate() == null || trade.getCreatedDate() == null) {
 
-            System.out.println("Invalid trade record");
 
+            logger.warn("Invalid trade record");
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Invalid Trade request");
 
@@ -44,6 +48,8 @@ public class TradeStoreController {
 
     @RequestMapping(value="/trades", method=RequestMethod.GET)
     public List<Trade> readTrades() {
+
+        logger.info("Inside readTrades");
         return tradeService.getTrades();
     }
 
@@ -56,7 +62,7 @@ public class TradeStoreController {
             List<Trade> trades = tradeService.getTradesByTradeId(id);
             return trades;
         } catch (NoSuchElementException exception) {
-
+            logger.warn("Trade Not Found");
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Trade Not Found", exception);
 
@@ -73,6 +79,7 @@ public class TradeStoreController {
             Trade trade = tradeService.getTradesByIdVersion(id,version);
 
             if(trade == null) {
+                logger.warn("Trade Not Found");
                 throw new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Trade Not Found");
             }
@@ -80,7 +87,7 @@ public class TradeStoreController {
             return trade;
         } catch (NoSuchElementException exception) {
 
-            System.out.println("Trade Not Found inside readTradesbyIdAndVersion");
+            logger.warn("Trade Not Found");
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Trade Not Found", exception);
 
@@ -92,7 +99,7 @@ public class TradeStoreController {
     @RequestMapping(value="/trades/expired", method=RequestMethod.GET)
     public List<Trade> getExpiredTrades(@RequestParam(name = "expired") String expiredFlag) {
 
-        System.out.println("Inside getExpiredTrades");
+        logger.info("Inside getExpiredTrades");
 
         return tradeService.getExpiredTrades();
     }
@@ -100,7 +107,7 @@ public class TradeStoreController {
     @RequestMapping(value="/trades/expired", method=RequestMethod.PUT)
     public List<Trade> updateExpiredTrades(@RequestParam(name = "expired") String expiredFlag) {
 
-        System.out.println("Inside updateExpiredTrades");
+        logger.info("Inside updateExpiredTrades");
 
         return tradeService.updateExpiredTrades();
     }
@@ -111,6 +118,8 @@ public class TradeStoreController {
                              @PathVariable(value = "version") int version,
                              @RequestBody Trade tradeDetails) {
 
+        logger.info("Inside updateTrade");
+
         return tradeService.updateTrade(id, version, tradeDetails);
     }
 
@@ -118,6 +127,7 @@ public class TradeStoreController {
     @RequestMapping(value="/trades/{tradeId}/{version}", method=RequestMethod.DELETE)
     public void deleteTrades(@PathVariable(value = "tradeId") String id,
                              @PathVariable(value = "version") int version) {
+        logger.info("Inside deleteTrades");
         tradeService.deleteTrade(id, version);
     }
 
