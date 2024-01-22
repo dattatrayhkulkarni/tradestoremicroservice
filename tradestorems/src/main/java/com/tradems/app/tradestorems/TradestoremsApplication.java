@@ -16,8 +16,6 @@ public class TradestoremsApplication {
 
 	public static void main(String[] args) {
 
-		logger.info("Before Starting application");
-
 		SpringApplication.run(TradestoremsApplication.class, args);
 	}
 
